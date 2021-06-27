@@ -7,6 +7,7 @@
 #
 require 'set'
 require 'pry'
+require 'pp'
 
 class UsageError < StandardError; end
 
@@ -16,7 +17,7 @@ class UsageError < StandardError; end
 MIN_WORD_LENGTH = 4
 PANGRAM_BONUS = 7
 WORD_LIST_DIR = File.join(File.dirname(__FILE__), '../wordlists')
-WORD_LIST_FILE = 'english-109583.txt'
+WORD_LIST_FILE = 'english-370102.txt'
 
 #
 # Helper Methods
@@ -120,7 +121,7 @@ def solve
     bee_words << word.upcase if is_word?(bee_letter_set, word)
   end
 
-  puts words_to_stats(bee_words, bee_letter_set)
+  pp words_to_stats(bee_words, bee_letter_set)
 
 rescue UsageError => e
   usage(e.message)
