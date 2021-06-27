@@ -17,7 +17,7 @@ class UsageError < StandardError; end
 MIN_WORD_LENGTH = 4
 PANGRAM_BONUS = 7
 WORD_LIST_DIR = File.join(File.dirname(__FILE__), '../wordlists')
-WORD_LIST_FILE = 'english-370102.txt'
+WORD_LIST_FILE = 'english-109583.txt'
 
 #
 # Helper Methods
@@ -49,9 +49,9 @@ def read_letters
 end
 
 def is_word?(bee_letter_set, word)
-  word_letter_set = word.upcase.split('').to_set
+  return false unless word.length >= MIN_WORD_LENGTH
 
-  return false unless word_letter_set.length >= MIN_WORD_LENGTH
+  word_letter_set = word.upcase.split('').to_set
   return false unless word_letter_set.include? bee_letter_set.first
 
   (word_letter_set - bee_letter_set).empty?
@@ -95,6 +95,8 @@ def test
   fail if is_word?(bee_letter_set, 'act')
   fail if is_word?(bee_letter_set, 'tact')
   fail unless is_word?(bee_letter_set, 'rack')
+  fail unless is_word?(bee_letter_set, 'tart')
+  fail unless is_word?(bee_letter_set, 'attar')
   fail unless is_word?(bee_letter_set, 'tract')
   fail unless is_word?(bee_letter_set, 'trackway')
 
@@ -114,7 +116,7 @@ def solve
   puts 'Solving for %s [requires: %s]' % [bee_letter_set.join, bee_letter_set.first]
 
   File.readlines(word_file).each do |line|
-    word = line.chomp
+    word = line.strip
     next unless word.length >= MIN_WORD_LENGTH
     next unless bee_letter_set.include? word[0].upcase
 
