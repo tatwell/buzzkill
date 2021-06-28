@@ -40,6 +40,10 @@ USAGE
   class Solver
     attr_reader :bee_words
 
+    def self.usage(message="Welcome to buzzkill!")
+      puts format(USAGE_FORMAT, message)
+    end
+
     def initialize(bee_letters=nil)
       bee_letters = bee_letters || ARGV[0]
       @bee_letter_set = parse_bee_set(bee_letters)
@@ -62,8 +66,6 @@ USAGE
       end
 
       words
-    rescue UsageError => e
-      usage(e.message)
     end
 
     def solve!
@@ -104,10 +106,6 @@ USAGE
       reporter = Reporter.new(self)
       pp reporter.word_groups
       pp reporter.stats
-    end
-
-    def usage(message="Welcome to buzzkill!")
-      inform(format(f, message))
     end
 
     private
@@ -184,7 +182,7 @@ USAGE
       suite.test_pangrams
       suite.test_scores
 
-      solver.inform("Tests passed!\n")
+      solver.inform("Tests passed!\n\n")
     end
 
     def initialize(solver)
@@ -221,6 +219,10 @@ end
 #
 BuzzKill::TestSuite.test!
 
-solver = BuzzKill::Solver.new
-solver.solve!
-solver.report!
+begin
+  solver = BuzzKill::Solver.new
+  solver.solve!
+  solver.report!
+rescue BuzzKill::UsageError => e
+  BuzzKill::Solver.usage(e.message)
+end
